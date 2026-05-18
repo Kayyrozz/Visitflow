@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
     .insert({
       ...result.data,
       agent_id: agent.id,
-      agence_id: agent.agence_id,
+      agence_id: agent.agence_id as string,
     })
     .select()
     .single();

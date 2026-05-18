@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     .from('visites')
     .select('id, statut, terminee_at, sms_envoye_at')
     .eq('id', visite_id)
-    .eq('agence_id', agent.agence_id)
+    .eq('agence_id', agent.agence_id as string)
     .single()
 
   if (visiteErr || !visite) {

@@ -63,7 +63,7 @@ export async function createProspect(data: {
 
   const { error } = await admin.from("prospects").insert({
     agent_id: agent.id,
-    agence_id: agent.agence_id,
+    agence_id: agent.agence_id as string,
     prenom: data.prenom.trim(),
     nom: data.nom.trim(),
     email: data.email || null,
@@ -91,7 +91,7 @@ export async function createVisite(data: {
 
   const { error } = await admin.from("visites").insert({
     agent_id: agent.id,
-    agence_id: agent.agence_id,
+    agence_id: agent.agence_id as string,
     prospect_id: data.prospect_id,
     bien_id: data.bien_id,
     date_visite: data.date_visite,
@@ -154,7 +154,7 @@ export async function createEvenement(data: {
 
   const { error } = await admin.from("evenements").insert({
     agent_id: agent.id,
-    agence_id: agent.agence_id,
+    agence_id: agent.agence_id as string,
     titre: data.titre.trim(),
     type: data.type,
     date_debut: data.date_debut,
@@ -182,7 +182,7 @@ export async function createBien(data: {
 
   const { error } = await admin.from("biens").insert({
     agent_id: agent.id,
-    agence_id: agent.agence_id,
+    agence_id: agent.agence_id as string,
     titre: data.titre.trim(),
     type: data.type as "APPARTEMENT" | "MAISON" | "TERRAIN" | "COMMERCIAL" | "AUTRE",
     adresse: data.adresse.trim(),

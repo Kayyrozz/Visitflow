@@ -49,7 +49,7 @@ export async function POST(req: NextRequest, { params }: Params) {
     p_token:         params.token,
     p_interet:       interet,
     p_coup_de_coeur: coup_de_coeur ?? false,
-    p_notes:         notes ?? null,
+    p_notes:         notes ?? undefined,
   })
 
   if (error) {
