@@ -17,7 +17,19 @@ async function getOrCreateAgent() {
     .eq("user_id", user.id)
     .single();
 
-  if (agent) return agent;
+  if (agent?.agence_id) return agent;
+
+  // Agent sans agence_id : créer l'agence et mettre à jour l'agent
+  if (agent && !agent.agence_id) {
+    const { data: agence } = await admin
+      .from("agences")
+      .insert({ nom: "Mon Agence" })
+      .select("id")
+      .single();
+    if (!agence) throw new Error("Impossible de créer l'agence");
+    await admin.from("agents").update({ agence_id: agence.id }).eq("id", agent.id);
+    return { ...agent, agence_id: agence.id };
+  }
 
   // Première connexion : créer agence + agent
 
