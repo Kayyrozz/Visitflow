@@ -8,7 +8,10 @@ async function getOrCreateAgent() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Non authentifié");
 
-  const { data: agent } = await supabase
+  // Utiliser le client admin pour contourner RLS (même approche que DashboardLayout)
+  const admin = createAdminClient();
+
+  const { data: agent } = await admin
     .from("agents")
     .select("id, agence_id")
     .eq("user_id", user.id)
@@ -16,8 +19,7 @@ async function getOrCreateAgent() {
 
   if (agent) return agent;
 
-  // Première connexion : créer agence + agent avec le client admin (contourne RLS)
-  const admin = createAdminClient();
+  // Première connexion : créer agence + agent
 
   const fullName = (user.user_metadata?.name as string | undefined) ?? "";
   const parts = fullName.trim().split(" ");
