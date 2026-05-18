@@ -1,0 +1,154 @@
+/* ── Ordre des layers (doit précéder toute règle) ── */
+@layer base, components, utilities, overrides;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ──────────────────────────────────────── */
+@layer base {
+  :root   { color-scheme: light; }
+  .dark   { color-scheme: dark;  }
+
+  * { @apply border-gray-200; }
+
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  /* Classe utilitaire pour le fond de page (évite le conflit de layers avec dark:bg-gray-950) */
+  .bg-page { background-color: theme("colors.gray.50"); }
+
+  /* Scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #e5e7eb transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #e5e7eb;
+    border-radius: 3px;
+  }
+}
+
+/* ── Dark mode — layer « overrides »  ──────────────
+   Ordonné après « utilities » → priorité supérieure
+   Sans conflit avec le mode jour
+   ───────────────────────────────────────────────── */
+@layer overrides {
+
+  /* Corps */
+  .dark body {
+    background-color: theme("colors.gray.950");
+    color: theme("colors.gray.100");
+  }
+
+  /* Scrollbar */
+  .dark .scrollbar-thin {
+    scrollbar-color: #374151 transparent;
+  }
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #374151;
+  }
+
+  /* ── Surfaces ── */
+  .dark .bg-white       { background-color: theme("colors.gray.900"); }
+  .dark .bg-gray-50     { background-color: theme("colors.gray.900"); }
+  .dark .bg-gray-100    { background-color: theme("colors.gray.800"); }
+
+  /* ── Textes ── */
+  .dark .text-gray-900  { color: theme("colors.gray.100"); }
+  .dark .text-gray-800  { color: theme("colors.gray.200"); }
+  .dark .text-gray-700  { color: theme("colors.gray.300"); }
+  .dark .text-gray-600  { color: theme("colors.gray.400"); }
+
+  /* ── Bordures ── */
+  .dark .border-gray-200 { border-color: theme("colors.gray.700"); }
+  .dark .border-gray-100 { border-color: theme("colors.gray.800"); }
+
+  /* ── Séparateurs ── */
+  .dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
+    border-color: theme("colors.gray.800");
+  }
+  .dark .divide-gray-50 > :not([hidden]) ~ :not([hidden]) {
+    border-color: theme("colors.gray.900");
+  }
+
+  /* Fond de page (priorité sur .dark .bg-gray-50) */
+  .dark .bg-page { background-color: theme("colors.gray.950"); }
+
+  /* ── Hover / Focus ── */
+  .dark .hover\:bg-gray-50:hover  { background-color: theme("colors.gray.800"); }
+  .dark .hover\:bg-gray-100:hover { background-color: theme("colors.gray.700"); }
+  .dark .hover\:bg-white:hover    { background-color: theme("colors.gray.800"); }
+  .dark .focus\:bg-white:focus    { background-color: theme("colors.gray.800"); }
+  .dark .hover\:text-gray-900:hover { color: theme("colors.gray.100"); }
+
+  /* ── Formulaires ── */
+  .dark input:not([type="radio"]):not([type="checkbox"]):not([type="range"]),
+  .dark select,
+  .dark textarea {
+    background-color: theme("colors.gray.800");
+    border-color: theme("colors.gray.700");
+    color: theme("colors.gray.100");
+  }
+  .dark input::placeholder,
+  .dark textarea::placeholder { color: theme("colors.gray.500"); }
+  .dark input:focus,
+  .dark select:focus,
+  .dark textarea:focus {
+    border-color: theme("colors.blue.500");
+    box-shadow: 0 0 0 1px theme("colors.blue.500");
+  }
+
+  /* ── Couleurs brand ── */
+  .dark .bg-brand-50    { background-color: rgb(23 37 84 / 0.4); }
+  .dark .text-brand-600 { color: theme("colors.blue.400"); }
+  .dark .text-brand-700 { color: theme("colors.blue.300"); }
+
+  /* ── Badges de statut ── */
+  .dark .bg-blue-50     { background-color: rgb(30 58 138 / 0.3); }
+  .dark .text-blue-700  { color: theme("colors.blue.300"); }
+  .dark .bg-green-50    { background-color: rgb(5 46 22 / 0.35); }
+  .dark .text-green-700 { color: theme("colors.green.300"); }
+  .dark .bg-yellow-50   { background-color: rgb(78 43 7 / 0.4); }
+  .dark .text-yellow-700 { color: theme("colors.yellow.300"); }
+  .dark .bg-red-50      { background-color: rgb(69 10 10 / 0.35); }
+  .dark .text-red-700   { color: theme("colors.red.300"); }
+  .dark .bg-amber-50    { background-color: rgb(69 26 3 / 0.35); }
+  .dark .text-amber-700 { color: theme("colors.amber.300"); }
+  .dark .bg-violet-100  { background-color: rgb(76 29 149 / 0.3); }
+  .dark .text-violet-800 { color: theme("colors.violet.300"); }
+  .dark .bg-emerald-100 { background-color: rgb(6 78 59 / 0.3); }
+  .dark .text-emerald-800 { color: theme("colors.emerald.300"); }
+  .dark .text-brand-400 { color: theme("colors.blue.300"); }
+  .dark .text-brand-800 { color: theme("colors.blue.200"); }
+  .dark .text-brand-900 { color: theme("colors.blue.200"); }
+  .dark .border-brand-100 { border-color: rgb(23 37 84 / 0.4); }
+  .dark .border-brand-400 { border-color: theme("colors.blue.600"); }
+  .dark .border-violet-400 { border-color: theme("colors.violet.600"); }
+  .dark .border-emerald-400 { border-color: theme("colors.emerald.600"); }
+
+  /* ── Badges colorés (variantes -100 non couvertes) ── */
+  .dark .bg-brand-100   { background-color: rgb(23 37 84 / 0.35); }
+  .dark .bg-green-100   { background-color: rgb(5 46 22 / 0.35); }
+  .dark .bg-amber-100   { background-color: rgb(78 43 7 / 0.35); }
+  .dark .bg-red-100     { background-color: rgb(69 10 10 / 0.35); }
+
+  /* ── Textes sur fonds colorés sombres ── */
+  .dark .text-blue-600   { color: theme("colors.blue.300"); }
+  .dark .text-green-600  { color: theme("colors.green.300"); }
+  .dark .text-yellow-600 { color: theme("colors.yellow.300"); }
+  .dark .text-red-600    { color: theme("colors.red.300"); }
+
+  /* ── Bordures colorées (variantes -100/-200) ── */
+  .dark .border-blue-100  { border-color: rgb(30 58 138 / 0.3); }
+  .dark .border-blue-200  { border-color: theme("colors.blue.700"); }
+  .dark .border-green-100 { border-color: rgb(5 46 22 / 0.3); }
+  .dark .border-amber-100 { border-color: rgb(78 43 7 / 0.3); }
+  .dark .border-amber-200 { border-color: theme("colors.amber.700"); }
+  .dark .border-red-100   { border-color: rgb(69 10 10 / 0.3); }
+  .dark .border-red-200   { border-color: theme("colors.red.700"); }
+}

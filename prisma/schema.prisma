@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      Role     @default(AGENT)
+  agencyId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  visits  Visit[]
+  clients Client[]
+
+  @@map("users")
+}
+
+model Client {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String?
+  phone     String?
+  notes     String?
+  agentId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  agent  User    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  visits Visit[]
+
+  @@map("clients")
+}
+
+model Property {
+  id          String   @id @default(cuid())
+  address     String
+  city        String
+  postalCode  String
+  type        String
+  surface     Float?
+  price       Float?
+  description String?
+  agentId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  visits Visit[]
+
+  @@map("properties")
+}
+
+model Visit {
+  id          String      @id @default(cuid())
+  scheduledAt DateTime
+  status      VisitStatus @default(PLANIFIEE)
+  notes       String?
+  clientId    String
+  propertyId  String
+  agentId     String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  client   Client   @relation(fields: [clientId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
+  agent    User     @relation(fields: [agentId], references: [id])
+
+  @@map("visits")
+}
+
+enum Role {
+  AGENT
+  MANAGER
+  ADMIN
+}
+
+enum VisitStatus {
+  PLANIFIEE
+  EN_COURS
+  TERMINEE
+  ANNULEE
+}
